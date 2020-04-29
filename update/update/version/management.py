@@ -71,6 +71,7 @@ def management(request):
             else:
                 query = {}
             res = client.search(index=version_index,
+                                doc_type=version_type,
                                 body={
                                     "from":(page-1)*15,
                                     "size":15,

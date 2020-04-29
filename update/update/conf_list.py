@@ -30,10 +30,7 @@ audit_type = conf.get("elasticsearch", "audit_type")
 title = conf.get("system","title")
 code_version = conf.get("system","code_version")
 
-vlicensegen = conf.get("executable","vlicensegen")
-vlicenseget = conf.get("executable","vlicenseget")
-vlicensereq = conf.get("executable","vlicensereq")
-vlicenselic = conf.get("executable","vlicenselic")
-vlicensexml = conf.get("executable","vlicensexml")
+
+
 
 

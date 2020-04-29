@@ -15,10 +15,3 @@ files_path = files
 status_path = status/update_status.json
 title = 产品管理系统
 code_version = 0.3
-
-[executable]
-vlicensegen = status/vlicensegen
-vlicenseget = status/vlicenseget
-vlicensereq = status/vlicensereq
-vlicenselic = license.lic
-vlicensexml = license.xml

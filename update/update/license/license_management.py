@@ -1,7 +1,6 @@
 #coding:utf-8
 
 import json
-import os
 import traceback
 import datetime
 import time
@@ -9,15 +8,12 @@ from util import license as license_server
 from .. import conf_list,query_dsl
 from django.shortcuts import render,HttpResponse
 from django.http import HttpResponseRedirect,FileResponse
-from util import timecycle
-from util import mkxml
-from util import license_maker
+
 license_index = conf_list.license_index
 license_type = conf_list.license_type
 client = conf_list.client
 error_logger = conf_list.error_logger
 system_title = conf_list.title
-
 __query__ = query_dsl.Query()
 
 class license():
@@ -183,35 +179,19 @@ class license():
         :return:
         """
         if request.method == "GET":
-            try:
-                os.remove(conf_list.vlicenselic)
-            except:
-                pass
             id = request.GET.get("id","")
             status = False
             msg = ""
-            licpath=""
             try:
                 res = client.get(index=license_index,doc_type=license_type,id=id)
                 source = res.get("_source",{})
                 if source:
-                    over_time = source.get("over_time","")
-                    device_id = source.get("device_id","")
-                    #encrypt_info = source.get("encrypt_info","")
-                    if device_id and over_time:
-                        expire = timecycle.utc_now_to_day(over_time)
-                        if mkxml.mkxml(conf_list.vlicensexml,expire):
-                            maker = license_maker.LicenseMaker()
-                            status,licpath = maker.license_maker(device_id)
-                            if status:
-                                status = True
-                            else:
-                                msg = "许可生成失败，请检查生成程序！"
-                        else:
-                            msg = "原始许可xml文件生成失败！"
-                        # f = open("status/license","wb")
-                        # f.write(encrypt_info)
-                        # f.close()
+                    encrypt_info = source.get("encrypt_info","")
+                    if encrypt_info:
+                        f = open("status/license","wb")
+                        f.write(encrypt_info)
+                        f.close()
+                        status = True
                     else:
                         msg = "无许可信息，请检查该数据的正确性！"
                 else:
@@ -220,13 +200,11 @@ class license():
                 print "获取许可信息失败！"
                 traceback.print_exc()
             if status:
-                print licpath
-                f = open(licpath,"rb")
+                f = open("status/license","rb")
                 res = FileResponse(f)
-                disposition = 'attachment;filename=license.lic'
+                disposition = 'attachment;filename=license'
                 res['Content-Disposition'] = disposition.encode("utf-8")
                 return res
-                
             else:
                 return HttpResponse(msg)
 
