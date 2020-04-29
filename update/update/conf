@@ -1,0 +1,24 @@
+[elasticsearch]
+version_index = version_d01
+version_type = version
+license_index = license
+license_type = license
+product_index = product
+product_type = info
+audit_index = audit_logs
+audit_type = logs
+hosts = ["172.16.39.231","172.16.39.233 ","172.16.39.234"]
+timeout = 5000
+
+[system]
+files_path = files
+status_path = status/update_status.json
+title = 产品管理系统
+code_version = 0.3
+
+[executable]
+vlicensegen = status/vlicensegen
+vlicenseget = status/vlicenseget
+vlicensereq = status/vlicensereq
+vlicenselic = license.lic
+vlicensexml = license.xml

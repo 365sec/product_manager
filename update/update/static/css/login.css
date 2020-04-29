@@ -1,0 +1,47 @@
+﻿body,
+html,
+body{
+  margin: 0;
+  padding: 0;
+  font-family:'Microsoft YaHei',sans-serif;
+  font-size: 16px;
+}
+
+.login_content{
+  width: 100%;
+  height: 100vh;
+  background: url("../images/bg.jpg")no-repeat;
+  background-size:cover;
+  background-position:center center;
+}
+.login_content_div{
+  text-align: center;
+  position: absolute;
+  top: 15%;
+  width: 100%;
+}
+.login_title{
+    font-family:'Microsoft Tai Le Bold', 'Microsoft Tai Le';
+    font-weight:700;
+    font-style:normal;
+    font-size:36px;
+    color:#FFFFFF;
+}
+.login_des{
+  width: 150px;
+  font-size: 16px;
+  color: #1890FF;
+  line-height: 50px;
+  margin: 20px auto;
+  border-bottom: 2px solid #1890FF;
+}
+.new_user input,
+.new_user button{
+  display: block;
+  margin: 24px auto;
+  padding: 0 12px;
+}
+.login_button{
+  font-size: 16px;
+  color: #fff;
+}

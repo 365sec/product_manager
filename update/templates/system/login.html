@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <title>登录页</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="{% static 'css/login.css' %}?v={{ version }}" type="text/css" rel="stylesheet"/>
+    <style>
+        input{
+            width: 368px;
+            height: 40px;
+            background: rgba(255, 255, 255, 1);
+            box-sizing: border-box;
+            border: 1px solid rgba(217, 217, 217, 1);
+            border-radius: 4px;
+            text-align: left;
+            color: black;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 16px;
+            line-height: 24px;
+        }
+        button{
+            width: 368px;
+            height: 40px;
+            background: rgba(24, 144, 255, 1);
+            border: none;
+            border-radius: 4px;
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            color: #FFFFFF;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 16px;
+            line-height: 24px;
+        }
+    </style>
+</head>
+<body>
+<div id="base" class="">
+    <div class="login_content">
+        <div class="login_content_div">
+            <img src="{% static 'images/clogo.png' %}" alt="江苏国瑞信安信息有限公司">
+            <div class="login_title">{{ system_title }}</div>
+            <div class="login_des">登录</div>
+            <form class="new_user" id="new_user" action="/login?next={{ next }}" accept-charset="UTF-8" method="post">
+                <input placeholder="账户" autofocus="autofocus"  type="text" value="{{ username }}" name="username">
+                <input placeholder="密码" autocomplete="off"  type="password" value="{{ password }}" name="password">
+                <button  class="shape login_button" name="button" type="submit" value="create">登录</button>
+            </form>
+            <div>
+                <div style="color: #ff5b5b;font-size: 18px;">{{ msg }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

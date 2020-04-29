@@ -1,0 +1,78 @@
+<form class="ip_range_form" style="    line-height: 39px;" onsubmit="return false" autocomplete="off" id="edit_product" action="" accept-charset="UTF-8"  method="post">
+    <p class="installarp" style="margin-top: 10px;">
+        产品信息
+        <span style="color: red;font-size: 12px;">
+      </span>
+    </p>
+    <div class="general" style="max-height: 230px;width: 700px;">
+        <input hidden name="id" value="{{ id }}">
+        <ul>
+            <li>产品名称&nbsp;:</li>
+            <li><input style="width:400px;" id="name" name="name" value="{{ hit.name }}"></li>
+        </ul>
+        <ul>
+            <li>负责人&nbsp;:</li>
+            <li>
+                <select style="width:400px;" class="installtwocopy2" name="leader" id="leader">
+                    {% for user_info in user_list %}
+                    {% if user_info.selected %}
+                    <option value="{{ user_info.username }}" selected>{{ user_info.username }}</option>
+                    {% else %}
+                    <option value="{{ user_info.username }}" selected>{{ user_info.username }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+        <ul>
+            <li>描述&nbsp;:</li>
+            <li><textarea name="description" style="width:400px;">{{ hit.description }}</textarea></li>
+        </ul>
+    </div>
+    <div class="alertboxbottom">
+        <button class="btn2 btn_self_defined_submit" style="margin-left:207px ;margin-top: 30px;">保存</button>
+    </div>
+</form>
+<script>
+        $(".btn_self_defined_submit").click(function () {
+            var name = $("#name").val();
+            var formData = new FormData($("#edit_product")[0]);
+            if(name == null || name == ""){
+                alert("产品名称不能为空！")
+            }else{
+                $.ajax({
+                    url: "/products/edit",
+                    type: "post",
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                      if (data.success){
+                        window.location.reload();
+                      } else {
+                        alert(data.msg);
+                      }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        error_info(XMLHttpRequest, textStatus, errorThrown);
+                    }
+                  })
+            }
+    })
+    $(".dropzone").click(function () {//btn_file为隐藏的input
+       if($(this).val() == ''){//如果没有选择文件则不触发
+           return false;
+        }
+       for(var i=0;i<this.files.length;i++){}
+       $(this).val('');//操作结束清空input中的内容
+    });
+
+</script>
+<style>
+  .alertbox2table tbody tr td:first-child{
+    width: 90px;
+  }
+</style>

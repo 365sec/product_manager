@@ -1,0 +1,227 @@
+<form class="ip_range_form" style="    line-height: 39px;" onsubmit="return false" autocomplete="off" id="new_version" action="" accept-charset="UTF-8"  method="post">
+    <p class="installarp" style="margin-top: 10px;">
+        版本信息
+        <span style="color: red;font-size: 12px;">
+      </span>
+    </p>
+    <div class="general" style="max-height: 230px;width: 700px;">
+        <ul>
+            <li>产品名称&nbsp;:</li>
+            <li>
+                <select style="width:400px;" id="product_select" name="product">
+                    {% for product in product_list %}
+                    <option value="{{ product.id }}">{{ product.name }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+        <ul>
+            <li>版本号&nbsp;:</li>
+            <li><input style="width:400px;" id="name" name="version"></li>
+        </ul>
+        <ul>
+            <li>类型&nbsp;:</li>
+            <li>
+                <select style="width:400px;" class="installtwocopy2" name="type" id="type">
+                    <option value="code">code</option>
+                    <option value="poc">poc</option>
+                    <option value="rule">rule</option>
+                </select>
+            </li>
+        </ul>
+        <ul>
+            <li>描述&nbsp;:</li>
+            <li><input name="description" style="width:400px;"></li>
+        </ul>
+        <ul>
+            <li>上传软件包&nbsp;:</li>
+            <li>
+                <input style="display:none" id="file" type="file" name="file">
+                <div class="dropzone dz-clickable">
+                    <div id="previes" class="dropzone-previews">
+                    </div>
+                    <div id="preview-template" style="display:none">
+                        <div class="dz-preview dz-file-preview">
+                            <div class="dz-success-mark">
+                                <span>√</span>
+                            </div>
+                            <div class="dz-error-mark">
+                                <span>×</span>
+                            </div>
+                            <div class="dz-progress">
+                                <span class="dz-upload" data-dz-uploadprogress=""></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dz-default dz-message">
+                        <span id="tips">点击此处上传文件！</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    <div class="alertboxbottom">
+
+        <button class="btn2 btn_self_defined_submit" style="margin-left:207px ;margin-top: 30px;">保存</button>
+    </div>
+</form><script type="text/javascript">
+    $(function () {
+
+        //隐藏列表框
+        $("body").click(function() {
+            $(".div_items").css('display', 'none');
+        });
+//移入移出效果
+        $(".div_items").on("mouseover mouseout", '.div_item', function(event){
+            if(event.type == "mouseover"){
+                $(this).css('background-color', '#dbdbdb').css('color', 'white');
+            }else if(event.type == "mouseout"){
+                $(this).css('background-color', '').css('color', '#666666');
+            }
+        })
+
+//项点击
+        $(".div_items").on('click', ".div_item", function() {
+            $(this).parent().prev().val($(this).text());
+        });
+
+        //弹出列表框
+        $(".txt1").click(function() {
+            var this1 = $(this).next('div');
+            this1.css('display', 'block');
+            var type = $(this).attr('rel'), val = $(this).val();
+            get_search_infos($(this), type, '/staffs/get_companies?type='+type+'&q='+val);
+            return false;
+        });
+
+        //文本框输入
+        $(".txt1").keyup(function() {
+            var type = $(this).attr('rel'), val = $(this).val();
+            get_search_infos($(this), type, '/staffs/get_companies?type='+type+'&q='+val);
+        });
+    })
+</script>
+<script>
+        $(".btn_self_defined_submit").click(function () {
+            var name = $("#name").val();
+            var file = $("#file").val();
+            var formData = new FormData($("#new_version")[0]);
+            var product_name = $("#product_select").find("option:selected").text();
+            console.log("产品名：" + product_name);
+            formData.append('product_name',product_name);
+            if(name == null || name == ""){
+                alert("版本号不能为空！")
+            }else{
+                $.ajax({
+                    url: "/version_management/new",
+                    type: "post",
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                      if (data.success){
+                        window.location.reload();
+                      } else {
+                        alert(data.msg);
+                      }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        error_info(XMLHttpRequest, textStatus, errorThrown);
+                    }
+                  })
+            }
+    })
+    $(".dropzone").click(function () {//btn_file为隐藏的input
+       if($(this).val() == ''){//如果没有选择文件则不触发
+           return false;
+        }
+       for(var i=0;i<this.files.length;i++){}
+       $(this).val('');//操作结束清空input中的内容
+    });
+
+</script>
+<script>
+$(function () {
+    //附件上传区点击打开附件上传窗体
+    var uploadinputname = "";
+    //附件上传区点击后打开附件上传窗体
+    $(".dropzone").click(function () {
+        //当前上传区无附件时，才允许上传
+        if ($(this).find("button").length <= 0) {
+            /**
+             * 给当前点击的上传区打上操作标志
+             * 便于附件上传回调后，能定位到附件是针对哪个上传区做的操作，以方便给这个上传区增加附件信息。
+             * 附件上传回调成功后，清楚该标志
+             */
+            <!--uploadinputname = $(this).siblings('input').get(0).name;-->
+            //模拟file标签点击事件
+            $("#file").click();
+        }
+    });
+    <!--//附件上传区上传附件后追加显示内容-->
+    $("#file").change(function(){
+        if($(this).val() != ""){
+            var obj = document.getElementById("file");
+            var fileName = obj.files[0].name;
+            var tagHtml = '<span class="tag '+ fileName +'">'+fileName+'<button type="button" class="close" title="移除附件">×</button></span>';
+            document.getElementById("tips").style.display = "none";
+            $(".dz-message").append(tagHtml);
+
+            <!--//移除上传区默认提示标签-->
+            <!--$.ajaxFileUpload({-->
+                <!--url:'/upload/uploadFile',//用于文件上传的服务器端请求地址-->
+                <!--secureuri:false,//一般设置为false-->
+                <!--fileElementId:'file',//文件上传空间的id属性  <input type="file" id="filename" name="filename" />-->
+                <!--dataType: 'json',-->
+                <!--data: {'folder':'collect_template'},-->
+                <!--success: function(result){-->
+                    <!--if(result.uploadResult == "success"){-->
+                        <!--$(".vbox .txt").remove();-->
+                        <!--var fileName = result.msg ;-->
+                        <!--/**-->
+                         <!--//克隆当前file文件上传标签组件-->
+                         <!--$(this).clone(true).appendTo($(".fileUploadArea"));-->
+                         <!--//将带有value的file改名后移动至tag标签内-->
+                         <!--$(this).removeClass("file").attr("name", "upload").appendTo($("."+fileName));*/-->
+
+                            <!--//给打上操作标志“uploadOperator”的上传区，添加该上传附件的信息-->
+                        <!--$("input[name='" + uploadinputname + "']").val(fileName);-->
+                        <!--var tagHtml = '<span class="tag '+ fileName +'">'+fileName+'<button type="button" class="close" title="移除附件">×</button></span>';-->
+                        <!--$(".vbox").append(tagHtml);-->
+                        <!--//alert("文件路径"+$("input[name='"+uploadinputname+"']").val());-->
+                    <!--}else{-->
+                        <!--layer.msg("上传失败!");-->
+                    <!--}-->
+                <!--}-->
+            <!--});-->
+
+        }
+    });
+    //附件上传区附件内容关闭事件
+    $(".dz-message").delegate(".close", "click", function(e){
+        //阻止事件冒泡行为
+        e.stopPropagation();
+        //移除当前附件标签内容
+        $(this).parents(".tag").remove();
+        //判断上传区是否已经无内容
+        if($(".vbox .tag").length <= 0){
+            document.getElementById("tips").style.display = "";
+        }
+    });
+
+    <!--//附件上传区附件内容文本点击事件屏蔽事件冒泡-->
+    <!--$(".vbox").delegate(".tag", "click", function(e){-->
+        <!--//阻止事件冒泡行为-->
+        <!--e.stopPropagation();-->
+    <!--});-->
+})
+</script>
+<style>
+  .alertbox2table tbody tr td:first-child{
+    width: 90px;
+  }
+</style>
