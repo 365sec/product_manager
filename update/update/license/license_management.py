@@ -143,7 +143,7 @@ class license():
                         "timestamp":timestamp,
                     }
                     client.index(index=license_index,doc_type=license_type,body=action)
-                    time.sleep(1)
+                    time.sleep(0.3)
                     content["success"] = True
                 else:
                     content["msg"] = "请检查参数是否为空！"
