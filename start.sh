@@ -1,11 +1,12 @@
 rootdir = `dirname $0`
 cd $rootdir
 cd update/status
-chmod +x vlicengen
+chmod +x vlicensegen
 
-if [ ! -f liense.xml ]
+if [ ! -f license.xml ]
 then
     echo "license.xml is missing,can not start !"
+    exit(0)
 fi
 
 ps -fe | grep 0.0.0.0:8101 | grep -v grep
