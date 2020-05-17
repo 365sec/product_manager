@@ -176,19 +176,19 @@
                         {% if current_page == 1 %}
                         <span class="previous_page disabled">&lt;</span>
                         {% else %}
-                        <a class="previous_page" href="task?page={{ last_page }}">&lt;</a>
+                        <a class="previous_page" href="license_management?page={{ last_page }}">&lt;</a>
                         {% endif %}
                         {% for page in page_list %}
                         {% if page == current_page %}
                         <em class="current">{{ current_page }}</em>
                         {% else %}
-                        <a href="task?page={{ page }}">{{ page }}</a>
+                        <a href="license_management?page={{ page }}">{{ page }}</a>
                         {% endif %}
                         {% endfor %}
                         {% if current_page == page_nums %}
                         <span class="previous_page disabled">&gt;</span>
                         {% else %}
-                        <a class="next_page" rel="next" href="task?page={{ next_page }}">&gt;</a>
+                        <a class="next_page" rel="next" href="license_management?page={{ next_page }}">&gt;</a>
                         {% endif %}
                     </ul>
                 </div>
@@ -201,11 +201,13 @@
     $(function () {
         $('.installthreebtn').click(function() {
             $("#create-div").html("");
-            $.get("/license/new", function (html) {
+            setTimeout(function(){
+                $.get("/license/new", function (html) {
               $("#create-div").html(html);
             }, 'html');
-            $('.body-color').fadeIn(100); //全局变得黑的效果，
+                  $('.body-color').fadeIn(100); //全局变得黑的效果，
             $('#installtwo').show();
+            },1000)
           });
          $('#installmore>div .close').click(function() {
             $('.body-color').fadeOut(100);

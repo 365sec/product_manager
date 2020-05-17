@@ -12,6 +12,7 @@ from django.http import HttpResponseRedirect,FileResponse
 from util import timecycle
 from util import mkxml
 from util import license_maker
+from ratelimit.decorators import ratelimit
 license_index = conf_list.license_index
 license_type = conf_list.license_type
 client = conf_list.client
@@ -111,7 +112,7 @@ class license():
         encrypt_info = license1.encryption(str_info) #加密
         return encrypt_info
 
-
+    @ratelimit(key='ip', rate='1/5s', block=True)
     def new(self,request):
         if request.method == "GET":
             product_list = __query__.get_product_list()
@@ -143,8 +144,8 @@ class license():
                         "timestamp":timestamp,
                     }
                     client.index(index=license_index,doc_type=license_type,body=action)
-                    time.sleep(0.3)
                     content["success"] = True
+                    time.sleep(1)
                 else:
                     content["msg"] = "请检查参数是否为空！"
             except:
