@@ -1,6 +1,6 @@
 rootdir = `dirname $0`
 cd $rootdir
-cd update/stats
+cd update/status
 chmod +x vlicengen
 
 if [ ! -f liense.xml ]
